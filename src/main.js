@@ -1,21 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Scroll Header Effect
+    // 1. Эффект слежения прожектора (Spotlight)
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            hero.style.setProperty('--mouse-x', `${x}%`);
+            hero.style.setProperty('--mouse-y', `${y}%`);
+        });
+    }
+
+    // 2. Появление контента при загрузке (Vanilla Reveal)
+    const heroContent = document.querySelector('.hero__content');
+    heroContent.style.opacity = '0';
+    heroContent.style.transform = 'translateY(30px)';
+    
+    setTimeout(() => {
+        heroContent.style.transition = 'all 1s cubic-bezier(0.16, 1, 0.3, 1)';
+        heroContent.style.opacity = '1';
+        heroContent.style.transform = 'translateY(0)';
+    }, 100);
+
+    // 3. Scroll Header
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('header--scrolled');
-        } else {
-            header.classList.remove('header--scrolled');
-        }
+        header.classList.toggle('header--scrolled', window.scrollY > 50);
     });
-
-    // Simple mobile menu placeholder
-    const burger = document.querySelector('.burger');
-    burger.addEventListener('click', () => {
-        alert('Мобильное меню будет реализовано при финальной сборке!');
-    });
-
-    // Инициализация GSAP для будущих анимаций
-    console.log('Kynox-Ynx Engine Ready');
 });
