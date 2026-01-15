@@ -61,4 +61,16 @@ features.forEach(item => {
         radarScanner.style.filter = 'none';
     });
 });
+    // Логика прогресс-бара для блога
+const blogFeed = document.querySelector('.blog__feed');
+const progressBar = document.querySelector('.blog__progress-bar');
+
+if (blogFeed && progressBar) {
+    blogFeed.addEventListener('scroll', () => {
+        const scrollTotal = blogFeed.scrollWidth - blogFeed.clientWidth;
+        const scrollLeft = blogFeed.scrollLeft;
+        const progress = (scrollLeft / scrollTotal) * 100;
+        progressBar.style.width = progress + '%';
+    });
+}
 });
