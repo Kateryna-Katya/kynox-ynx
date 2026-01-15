@@ -1286,3 +1286,27 @@ a {
         bottom: 20px;
     }
 }
+/* Базовый стиль для всех иконок Lucide */
+svg.lucide {
+    width: 24px;
+    /* или другой нужный размер */
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Иконки внутри кнопок или специфических блоков */
+.btn i,
+.feature-item__icon i,
+.step-card__icon i {
+    width: 20px;
+    height: 20px;
+}
+
+.radar__core i {
+    width: 40px;
+    height: 40px;
+}
