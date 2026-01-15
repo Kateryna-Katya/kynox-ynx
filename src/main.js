@@ -28,4 +28,21 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
         header.classList.toggle('header--scrolled', window.scrollY > 50);
     });
+    // Внутри DOMContentLoaded добавим Intersection Observer для анимации появления секции
+const observerOptions = {
+    threshold: 0.2
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+        }
+    });
+}, observerOptions);
+
+const stepsSection = document.querySelector('.steps');
+if (stepsSection) {
+    observer.observe(stepsSection);
+}
 });

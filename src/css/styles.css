@@ -402,3 +402,139 @@ a {
         height: 300px;
     }
 }
+/* --- STEPS SECTION --- */
+.steps {
+    padding: 120px 0;
+    background: var(--color-dark);
+}
+
+.steps__header {
+    margin-bottom: 60px;
+    max-width: 700px;
+}
+
+.steps__title {
+    font-family: var(--font-accent);
+    font-size: clamp(32px, 4vw, 48px);
+    margin-bottom: 20px;
+}
+
+.steps__subtitle {
+    color: var(--color-text-dim);
+    font-size: 18px;
+}
+
+.steps__grid {
+    display: flex;
+    gap: 15px;
+    height: 500px;
+    transition: var(--transition);
+}
+
+.step-card {
+    position: relative;
+    flex: 1;
+    background: var(--color-glass);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+    padding: 40px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Эффект при наведении на карту */
+.step-card:hover {
+    flex: 2.5;
+    background: rgba(0, 210, 255, 0.05);
+    border-color: rgba(0, 210, 255, 0.3);
+}
+
+.step-card__number {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-family: var(--font-accent);
+    font-size: 24px;
+    color: var(--color-accent);
+    opacity: 0.5;
+    transition: var(--transition);
+}
+
+.step-card:hover .step-card__number {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.step-card__content {
+    position: relative;
+    z-index: 2;
+}
+
+.step-card__title {
+    font-family: var(--font-accent);
+    font-size: 24px;
+    margin-bottom: 20px;
+    white-space: nowrap;
+}
+
+.step-card__text {
+    color: var(--color-text-dim);
+    font-size: 16px;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    max-width: 350px;
+}
+
+.step-card:hover .step-card__text {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+.step-card__icon {
+    margin-top: 30px;
+    font-size: 32px;
+    color: var(--color-accent);
+    transform: translateX(-100px);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.step-card:hover .step-card__icon {
+    transform: translateX(0);
+    opacity: 1;
+    transition-delay: 0.3s;
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 992px) {
+    .steps__grid {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .step-card {
+        flex: none;
+        height: 200px;
+    }
+
+    .step-card:hover {
+        height: 300px;
+        flex: none;
+    }
+
+    .step-card__text {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .step-card__icon {
+        display: none;
+    }
+}
