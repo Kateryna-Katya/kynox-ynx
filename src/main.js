@@ -72,5 +72,50 @@ if (blogFeed && progressBar) {
         const progress = (scrollLeft / scrollTotal) * 100;
         progressBar.style.width = progress + '%';
     });
+    }
+    // --- FORM LOGIC ---
+
+// 1. Генерация Капчи
+const captchaQuest = document.getElementById('captcha-question');
+const num1 = Math.floor(Math.random() * 10) + 1;
+const num2 = Math.floor(Math.random() * 10) + 1;
+const correctAnswer = num1 + num2;
+
+if (captchaQuest) {
+    captchaQuest.textContent = `${num1} + ${num2} = ?`;
 }
+
+// 2. Валидация телефона (только цифры)
+const phoneInput = document.getElementById('phone');
+phoneInput.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/[^0-9+]/g, '');
+});
+
+// 3. Обработка отправки
+const form = document.getElementById('careerForm');
+const successUI = document.getElementById('successMessage');
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const userAnswer = parseInt(document.getElementById('captcha-answer').value);
+
+    if (userAnswer !== correctAnswer) {
+        alert('Ошибка в капче! Попробуйте еще раз.');
+        return;
+    }
+
+    // Имитация AJAX
+    const submitBtn = form.querySelector('.btn--submit');
+    submitBtn.textContent = 'Отправка...';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        form.style.display = 'none';
+        successUI.classList.add('active');
+        
+        // Скролл к началу формы, если нужно
+        successUI.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 1500);
+});
 });
