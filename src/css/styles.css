@@ -1326,7 +1326,7 @@ svg.lucide {
 
 .legal-title {
     font-family: var(--font-accent);
-    font-size: clamp(32px, 5vw, 56px);
+    font-size: clamp(26px, 5vw, 56px);
     margin-bottom: 40px;
     line-height: 1.2;
 }
