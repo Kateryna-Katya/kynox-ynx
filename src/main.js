@@ -1,6 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. Эффект слежения прожектора (Spotlight)
+    // --- 1. МОБИЛЬНОЕ МЕНЮ ---
+    const burger = document.querySelector('.burger');
+    const closeMenu = document.querySelector('.mobile-overlay__close');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+    const mobileLinks = document.querySelectorAll('.mobile-nav__link');
+
+    const toggleMenu = (state) => {
+        mobileOverlay.classList.toggle('active', state);
+        document.body.style.overflow = state ? 'hidden' : '';
+    };
+
+    burger.addEventListener('click', () => toggleMenu(true));
+    closeMenu.addEventListener('click', () => toggleMenu(false));
+    mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+
+
+    // --- 2. ЭФФЕКТЫ СКРОЛЛА (HEADER & REVEAL) ---
+    const header = document.querySelector('.header');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                // Если это секция шагов, можно запустить доп. анимацию
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('header--scrolled', window.scrollY > 50);
+    });
+
+
+    // --- 3. HERO SPOTLIGHT ---
     const hero = document.querySelector('.hero');
     if (hero) {
         hero.addEventListener('mousemove', (e) => {
@@ -12,110 +46,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Появление контента при загрузке (Vanilla Reveal)
-    const heroContent = document.querySelector('.hero__content');
-    heroContent.style.opacity = '0';
-    heroContent.style.transform = 'translateY(30px)';
-    
-    setTimeout(() => {
-        heroContent.style.transition = 'all 1s cubic-bezier(0.16, 1, 0.3, 1)';
-        heroContent.style.opacity = '1';
-        heroContent.style.transform = 'translateY(0)';
-    }, 100);
 
-    // 3. Scroll Header
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-        header.classList.toggle('header--scrolled', window.scrollY > 50);
-    });
-    // Внутри DOMContentLoaded добавим Intersection Observer для анимации появления секции
-const observerOptions = {
-    threshold: 0.2
-};
+    // --- 4. БЛОГ: PROGRESS BAR ---
+    const blogFeed = document.querySelector('.blog__feed');
+    const progressBar = document.querySelector('.blog__progress-bar');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-        }
-    });
-}, observerOptions);
-
-const stepsSection = document.querySelector('.steps');
-if (stepsSection) {
-    observer.observe(stepsSection);
-    }
-    // Логика для секции инноваций
-const features = document.querySelectorAll('.feature-item');
-const radarScanner = document.querySelector('.radar__scanner');
-
-features.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-        // Замедляем и подсвечиваем сканер при наведении на фичу
-        radarScanner.style.animationPlayState = 'paused';
-        radarScanner.style.filter = 'brightness(2) blur(2px)';
-    });
-
-    item.addEventListener('mouseleave', () => {
-        radarScanner.style.animationPlayState = 'running';
-        radarScanner.style.filter = 'none';
-    });
-});
-    // Логика прогресс-бара для блога
-const blogFeed = document.querySelector('.blog__feed');
-const progressBar = document.querySelector('.blog__progress-bar');
-
-if (blogFeed && progressBar) {
-    blogFeed.addEventListener('scroll', () => {
-        const scrollTotal = blogFeed.scrollWidth - blogFeed.clientWidth;
-        const scrollLeft = blogFeed.scrollLeft;
-        const progress = (scrollLeft / scrollTotal) * 100;
-        progressBar.style.width = progress + '%';
-    });
-    }
-    // --- FORM LOGIC ---
-
-// 1. Генерация Капчи
-const captchaQuest = document.getElementById('captcha-question');
-const num1 = Math.floor(Math.random() * 10) + 1;
-const num2 = Math.floor(Math.random() * 10) + 1;
-const correctAnswer = num1 + num2;
-
-if (captchaQuest) {
-    captchaQuest.textContent = `${num1} + ${num2} = ?`;
-}
-
-// 2. Валидация телефона (только цифры)
-const phoneInput = document.getElementById('phone');
-phoneInput.addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/[^0-9+]/g, '');
-});
-
-// 3. Обработка отправки
-const form = document.getElementById('careerForm');
-const successUI = document.getElementById('successMessage');
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const userAnswer = parseInt(document.getElementById('captcha-answer').value);
-
-    if (userAnswer !== correctAnswer) {
-        alert('Ошибка в капче! Попробуйте еще раз.');
-        return;
+    if (blogFeed && progressBar) {
+        blogFeed.addEventListener('scroll', () => {
+            const scrollTotal = blogFeed.scrollWidth - blogFeed.clientWidth;
+            const progress = (blogFeed.scrollLeft / scrollTotal) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
     }
 
-    // Имитация AJAX
-    const submitBtn = form.querySelector('.btn--submit');
-    submitBtn.textContent = 'Отправка...';
-    submitBtn.disabled = true;
 
-    setTimeout(() => {
-        form.style.display = 'none';
-        successUI.classList.add('active');
-        
-        // Скролл к началу формы, если нужно
-        successUI.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 1500);
-});
+    // --- 5. КОНТАКТНАЯ ФОРМА & КАПЧА ---
+    const captchaLabel = document.getElementById('captcha-question');
+    const phoneInput = document.getElementById('phone');
+    const form = document.getElementById('careerForm');
+
+    if (form) {
+        const n1 = Math.floor(Math.random() * 10) + 1;
+        const n2 = Math.floor(Math.random() * 10) + 1;
+        const result = n1 + n2;
+        if (captchaLabel) captchaLabel.textContent = `${n1} + ${n2} = ?`;
+
+        phoneInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9+]/g, '');
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const answer = parseInt(document.getElementById('captcha-answer').value);
+            if (answer !== result) {
+                alert('Неверный ответ капчи!');
+                return;
+            }
+            
+            const btn = form.querySelector('.btn--submit');
+            btn.textContent = 'Отправка...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                form.style.display = 'none';
+                document.getElementById('successMessage').classList.add('active');
+            }, 1500);
+        });
+    }
+
+
+    // --- 6. COOKIE POPUP LOGIC ---
+    const cookiePopup = document.getElementById('cookiePopup');
+    const acceptBtn = document.getElementById('acceptCookies');
+
+    if (!localStorage.getItem('cookies-accepted')) {
+        setTimeout(() => {
+            cookiePopup.classList.add('active');
+        }, 2000);
+    }
+
+    acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookies-accepted', 'true');
+        cookiePopup.classList.remove('active');
+    });
 });
