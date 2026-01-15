@@ -44,5 +44,21 @@ const observer = new IntersectionObserver((entries) => {
 const stepsSection = document.querySelector('.steps');
 if (stepsSection) {
     observer.observe(stepsSection);
-}
+    }
+    // Логика для секции инноваций
+const features = document.querySelectorAll('.feature-item');
+const radarScanner = document.querySelector('.radar__scanner');
+
+features.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        // Замедляем и подсвечиваем сканер при наведении на фичу
+        radarScanner.style.animationPlayState = 'paused';
+        radarScanner.style.filter = 'brightness(2) blur(2px)';
+    });
+
+    item.addEventListener('mouseleave', () => {
+        radarScanner.style.animationPlayState = 'running';
+        radarScanner.style.filter = 'none';
+    });
+});
 });
